@@ -79,13 +79,24 @@ func (r *Threshold) Check(v float64) bool {
 // -*- Implement cobra.Value -*-
 
 func (r *Threshold) String() string {
-	s := fmt.Sprintf("%v:%v", r.Start, r.End)
 
-	if r.Inverted {
-		return "@" + s
+	f := func(v float64) string {
+		switch {
+		case math.IsInf(v, 1):
+			return ""
+		case math.IsInf(v, -1):
+			return "~"
+		default:
+			return fmt.Sprintf("%v", v)
+		}
 	}
 
-	return s
+	inv := ""
+	if r.Inverted {
+		inv = "@"
+	}
+
+	return fmt.Sprintf("%s%s:%s", inv, f(r.Start), f(r.End))
 }
 
 func (r *Threshold) Set(s string) error {
