@@ -68,10 +68,36 @@ func ParseThreshold(s string) (Threshold, error) {
 }
 
 // Check returns true if value should be alerted
-func (r Threshold) Check(v float64) bool {
+func (r *Threshold) Check(v float64) bool {
 	if r.Inverted {
 		return v >= r.Start && v <= r.End
 	}
 
 	return v < r.Start || v > r.End
+}
+
+// -*- Implement cobra.Value -*-
+
+func (r *Threshold) String() string {
+	s := fmt.Sprintf("%v:%v", r.Start, r.End)
+
+	if r.Inverted {
+		return "@" + s
+	}
+
+	return s
+}
+
+func (r *Threshold) Set(s string) error {
+	th, err := ParseThreshold(s)
+	if err != nil {
+		return err
+	}
+
+	*r = th
+	return nil
+}
+
+func (r *Threshold) Type() string {
+	return "threshold"
 }

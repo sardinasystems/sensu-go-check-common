@@ -28,11 +28,17 @@ func TestSetupFlag(t *testing.T) {
 		Inverted: true,
 	}
 
+	strValue := ""
+
 	option := commonOpt
-	option.Option.Value = &option.strValue
+	option.Option.Value = &strValue
 	option.Value = &finalValue
 
 	err := option.SetValue("@10:20")
 	assert.Nil(t, err)
 	assert.Equal(t, expectedValue, finalValue)
+}
+
+func TestVerifyType(t *testing.T) {
+	assert.Implements(t, (*sensu.ConfigOption)(nil), &commonOpt)
 }
