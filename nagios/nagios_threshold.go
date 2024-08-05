@@ -1,4 +1,4 @@
-package utils
+package nagios
 
 import (
 	"fmt"
@@ -7,17 +7,17 @@ import (
 	"strings"
 )
 
-// NagiosThreshold represents range for value
+// Threshold represents range for value
 //
 // http://nagios-plugins.org/doc/guidelines.html#THRESHOLDFORMAT
-type NagiosThreshold struct {
+type Threshold struct {
 	Start    float64
 	End      float64
 	Inverted bool
 }
 
 // ParseThreshold parses Nagios Threshold format
-func ParseThreshold(s string) (NagiosThreshold, error) {
+func ParseThreshold(s string) (Threshold, error) {
 	inverted := false
 	if strings.HasPrefix(s, "@") {
 		inverted = true
@@ -40,15 +40,15 @@ func ParseThreshold(s string) (NagiosThreshold, error) {
 
 		start, err := parse(parts[0])
 		if err != nil {
-			return NagiosThreshold{}, fmt.Errorf("Threshold parse error: %v", err)
+			return Threshold{}, fmt.Errorf("Threshold parse error: %w", err)
 		}
 
 		end, err := parse(parts[1])
 		if err != nil {
-			return NagiosThreshold{}, fmt.Errorf("Threshold parse error: %v", err)
+			return Threshold{}, fmt.Errorf("Threshold parse error: %w", err)
 		}
 
-		return NagiosThreshold{
+		return Threshold{
 			Start:    start,
 			End:      end,
 			Inverted: inverted,
@@ -57,10 +57,10 @@ func ParseThreshold(s string) (NagiosThreshold, error) {
 
 	f, err := parse(s)
 	if err != nil {
-		return NagiosThreshold{}, fmt.Errorf("Threshold parse error: %v", err)
+		return Threshold{}, fmt.Errorf("Threshold parse error: %w", err)
 	}
 
-	return NagiosThreshold{
+	return Threshold{
 		Start:    0.0,
 		End:      f,
 		Inverted: inverted,
@@ -68,7 +68,7 @@ func ParseThreshold(s string) (NagiosThreshold, error) {
 }
 
 // Check returns true if value should be alerted
-func (r NagiosThreshold) Check(v float64) bool {
+func (r Threshold) Check(v float64) bool {
 	if r.Inverted {
 		return v >= r.Start && v <= r.End
 	}

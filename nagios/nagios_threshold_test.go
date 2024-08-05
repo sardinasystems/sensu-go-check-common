@@ -1,4 +1,4 @@
-package utils
+package nagios
 
 import (
 	"fmt"
@@ -15,17 +15,17 @@ func TestParseThreshold(t *testing.T) {
 
 	testCases := []struct {
 		Input  string
-		Output NagiosThreshold
+		Output Threshold
 		Err    error
 	}{
-		{"10", NagiosThreshold{0.0, 10.0, false}, nil},
-		{"10:", NagiosThreshold{10.0, inf, false}, nil},
-		{"~:10", NagiosThreshold{ninf, 10.0, false}, nil},
-		{"10:20", NagiosThreshold{10.0, 20.0, false}, nil},
-		{"@10:20", NagiosThreshold{10.0, 20.0, true}, nil},
-		{"abc", NagiosThreshold{}, abcerr},
-		{"abc:10", NagiosThreshold{}, abcerr},
-		{"10:abc", NagiosThreshold{}, abcerr},
+		{"10", Threshold{0.0, 10.0, false}, nil},
+		{"10:", Threshold{10.0, inf, false}, nil},
+		{"~:10", Threshold{ninf, 10.0, false}, nil},
+		{"10:20", Threshold{10.0, 20.0, false}, nil},
+		{"@10:20", Threshold{10.0, 20.0, true}, nil},
+		{"abc", Threshold{}, abcerr},
+		{"abc:10", Threshold{}, abcerr},
+		{"10:abc", Threshold{}, abcerr},
 	}
 
 	for _, tc := range testCases {
