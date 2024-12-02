@@ -2,8 +2,6 @@ module github.com/sardinasystems/sensu-go-check-common
 
 go 1.22.7
 
-toolchain go1.23.1
-
 require (
 	github.com/sensu/core/v2 v2.20.0
 	github.com/sensu/sensu-plugin-sdk v0.19.0
